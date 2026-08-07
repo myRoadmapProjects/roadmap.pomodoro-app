@@ -1,8 +1,8 @@
-import { Component, Signal, signal, WritableSignal } from '@angular/core';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucidePlus } from '@ng-icons/lucide';
-import { Task } from '../../../core/models/Tasks.model';
+import { Component, signal, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCheck, lucidePlus } from '@ng-icons/lucide';
+import { Task } from '../../../core/models/Tasks.model';
 
 @Component({
   selector: 'zibug-tasks-container',
@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './tasks-container.component.html',
   styleUrl: './tasks-container.component.css',
   standalone: true,
-  viewProviders: [provideIcons({lucidePlus})]
+  viewProviders: [provideIcons({lucidePlus, lucideCheck})]
 })
 export class TasksContainerComponent {
 
@@ -40,10 +40,15 @@ export class TasksContainerComponent {
 
   selectTask(task: Task) {
     this.selectedTask.set(task);
-    console.log(this.selectedTask());
   }
 
-  selectedTaskInset(taskId: number) {
-    return this.selectedTask()?.id == taskId ? 'inset-shadow-sm inset-shadow-gray-400' : 'shadow-md shadow-gray-400';
+  selectedTaskInset(task: Task) {
+    const { id, status } = task;
+    if(status == 'done') return;
+    return this.selectedTask()?.id == id ? 'inset-shadow-sm inset-shadow-gray-400' : 'shadow-md shadow-gray-400';
+  }
+
+  markAsCompleted(taskId: number) {
+    this.tasks.update(prev => prev.map(t => (t.id == taskId ? {...t, status: t.status == 'done' ? 'todo' : 'done'} : t)))
   }
 }
