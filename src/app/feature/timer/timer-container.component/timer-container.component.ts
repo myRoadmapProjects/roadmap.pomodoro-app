@@ -90,11 +90,11 @@ export class TimerContainerComponent {
   }
 
   selectedTimerInset(selectedValue: number) {
-    return this.counterService.selectedTimer().value === selectedValue ? ' inset-shadow-red-900 inset-shadow-sm' : '';
+    return this.counterService.selectedTimer().value === selectedValue ? ' inset-shadow-red-900 inset-shadow-sm' : ' shadow-red-900 shadow-sm';
   }
 
   selectedStatusInset(timerStatus: string) {
-    return this.timerStatus() === timerStatus ? ' inset-shadow-gray-900 inset-shadow-sm' : '';
+    return this.timerStatus() === timerStatus ? ' inset-shadow-gray-900 inset-shadow-sm' : ' shadow-gray-900 shadow-sm';
   }
 }
 

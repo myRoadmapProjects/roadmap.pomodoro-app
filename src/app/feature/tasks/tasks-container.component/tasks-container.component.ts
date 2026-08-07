@@ -13,8 +13,10 @@ import { FormsModule } from '@angular/forms';
   viewProviders: [provideIcons({lucidePlus})]
 })
 export class TasksContainerComponent {
+
   protected tasks: WritableSignal<Task[]> = signal([]);
   protected _taskToAdd = signal("");
+  protected selectedTask: WritableSignal<Task | null> = signal(null);
 
   set taskToAdd(taskName: string) {
     this._taskToAdd.set(taskName);
@@ -31,7 +33,17 @@ export class TasksContainerComponent {
 
   addTask() {
     if(!this.taskToAdd || this.taskToAdd.trim() === "") return;
-    this.tasks.update(curr => [...curr, {name: this.taskToAdd, status: 'todo'}])
+    const newId = this.tasks().length + 1;
+    this.tasks.update(curr => [...curr, {name: this.taskToAdd, status: 'todo', id: newId}])
     this.taskToAdd = "";
+  }
+
+  selectTask(task: Task) {
+    this.selectedTask.set(task);
+    console.log(this.selectedTask());
+  }
+
+  selectedTaskInset(taskId: number) {
+    return this.selectedTask()?.id == taskId ? 'inset-shadow-sm inset-shadow-gray-400' : 'shadow-md shadow-gray-400';
   }
 }
