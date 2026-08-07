@@ -1,14 +1,16 @@
 import { Component, computed, effect, inject, Signal, signal, WritableSignal } from '@angular/core';
 import { CounterService } from '../../../core/service/counter.service';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { bootstrapPause, bootstrapPlay, bootstrapStop } from '@ng-icons/bootstrap-icons';
 
 export type TimerStatus = 'started' | 'paused' | 'stopped';
 
 @Component({
   selector: 'zibug-timer-container',
-  imports: [],
+  imports: [NgIcon],
   templateUrl: './timer-container.component.html',
   styleUrl: './timer-container.component.css',
-
+  providers: [provideIcons({bootstrapPlay, bootstrapPause, bootstrapStop})],
   standalone: true
 })
 export class TimerContainerComponent {
@@ -25,6 +27,21 @@ export class TimerContainerComponent {
 
     return `${formattedMinutes} : ${formattedSeconds}`;
   });
+
+  protected timerStatusOptions: {icon: string, status: TimerStatus}[] = [
+    {
+      icon: 'bootstrapPlay',
+      status: 'started'
+    },
+    {
+      icon: 'bootstrapPause',
+      status: 'paused'
+    },
+    {
+      icon: 'bootstrapStop',
+      status: 'stopped'
+    }
+  ]
 
   protected timerId: any = null;
 
@@ -64,6 +81,7 @@ export class TimerContainerComponent {
   }
 
   handleChangeSelectedTimer(idx: number) {
+    if(this._timerStatus() == 'started') return;
     this.counterService.selectedTimer = idx;
   }
 

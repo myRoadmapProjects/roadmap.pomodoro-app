@@ -1,7 +1,10 @@
   <div class="rounded-2xl bg-gray-100 p-5 shadow-lg shadow-red-100 grid grid-cols-3 gap-5">
     <!-- <div class="grid grid-cols-3 gap-3"> -->
     @for(selectOption of this.counterService.timerValues; let index = $index; track index) {
-      <button type="button" [class]="'col-span-1 rounded-xl p-2 bg-red-400 cursor-pointer' +  this.selectedTimerInset(selectOption.value)" (click)="handleChangeSelectedTimer(index)">
+      <button
+        type="button"
+        [class]="'col-span-1 rounded-xl p-2 bg-red-400 cursor-pointer active:inset-shadow-red-900 active:inset-shadow-sm' +  this.selectedTimerInset(selectOption.value)"
+        (click)="handleChangeSelectedTimer(index)">
         {{selectOption.label}}
       </button>
     }
@@ -9,7 +12,13 @@
     <div class="p-3 col-span-3 rounded-2xl bg-gray-400 flex justify-center">
       <p class="text-8xl">{{this.formattedTime()}}</p>
     </div>
-    @for(timerStatus of ['started', 'paused', 'stopped']; track timerStatus) {
-      <button type="button" [class]="'col-span-1 rounded-2xl p-2 bg-gray-400 cursor-pointer ' + this.selectedStatusInset(timerStatus)" (click)="this.handleChangeSelectedTimerStatus(timerStatus)">{{timerStatus}}</button>
+    @for(timerStatus of timerStatusOptions; track timerStatus) {
+      <button
+        type="button"
+        [class]="'col-span-1 rounded-2xl p-2 bg-gray-400 cursor-pointer active:inset-shadow-gray-900 active:inset-shadow-sm flex justify-center items-center ' + this.selectedStatusInset(timerStatus.status)"
+        (click)="this.handleChangeSelectedTimerStatus(timerStatus.status)"
+      >
+        <ng-icon class="text-2xl" [name]="timerStatus.icon"/>
+      </button>
     }
   </div>
