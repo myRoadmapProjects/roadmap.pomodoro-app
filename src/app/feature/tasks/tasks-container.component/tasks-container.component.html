@@ -12,13 +12,13 @@
       </button>
       <button
         [class]="
-          'absolute right-4 px-2 flex items-center rounded-2xl p-2 ' +
+          'absolute right-4 flex items-center rounded-2xl p-2 ' +
           'active:inset-shadow-gray-400 active:inset-shadow-sm ' +
           (task.status == 'done' ? 'text-green-500' : 'text-gray-500')
         "
         (click)="this.markAsCompleted(task.id)"
       >
-        <ng-icon name="lucideCheck"/>
+        <ng-icon class="text-xl" name="lucideCheck"/>
       </button>
     </div>
   }

@@ -1,4 +1,4 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, effect, signal, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCheck, lucidePlus } from '@ng-icons/lucide';
@@ -14,9 +14,21 @@ import { Task } from '../../../core/models/Tasks.model';
 })
 export class TasksContainerComponent {
 
-  protected tasks: WritableSignal<Task[]> = signal([]);
-  protected _taskToAdd = signal("");
+  loadTasksFromStorage() {
+    const saved = localStorage.getItem('my_tasks');
+    const parsedTask = saved ? JSON.parse(saved) : [];
+    return parsedTask as Task[];
+  }
+
+  protected tasks: WritableSignal<Task[]> = signal(this.loadTasksFromStorage());
+  protected _taskToAdd: WritableSignal<string> = signal("");
   protected selectedTask: WritableSignal<Task | null> = signal(null);
+
+  constructor() {
+    effect(() => {
+      localStorage.setItem('my_tasks', JSON.stringify(this.tasks()));
+    });
+  }
 
   set taskToAdd(taskName: string) {
     this._taskToAdd.set(taskName);
