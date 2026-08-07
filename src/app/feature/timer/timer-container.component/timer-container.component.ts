@@ -8,6 +8,7 @@ export type TimerStatus = 'started' | 'paused' | 'stopped';
   imports: [],
   templateUrl: './timer-container.component.html',
   styleUrl: './timer-container.component.css',
+
   standalone: true
 })
 export class TimerContainerComponent {
