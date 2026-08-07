@@ -34,7 +34,13 @@
           <input class="border-dashed border-b-2 outline-none" (keydown.enter)="confirmEdit(task.id)" [(ngModel)]="this.newEditedName"/>
         }
       </button>
-      <div class="absolute right-4 grid grid-cols-3 gap-2">
+      <div class="
+        absolute z-15 sm:z-0 top-5 sm:top-0 right-4
+        grid grid-cols-1 sm:grid-cols-3 gap-2
+        rounded-2xl
+        shadow-sm sm:shadow-none shadow-gray-400
+        bg-gray-100 sm:bg-transparent
+      ">
         <button
           [class]="
             'flex items-center rounded-2xl p-2 cursor-pointer ' +
