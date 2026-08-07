@@ -98,7 +98,7 @@ export class TasksContainerComponent {
   }
 
   handleClickSelectedDropdown(idx: number) {
-    this.selectedDropDown.set(task.id);
+    this.selectedDropDown.set(idx);
   }
 
   showDropdown(idx: number) {
