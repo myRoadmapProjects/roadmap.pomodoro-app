@@ -84,6 +84,7 @@ export class TasksContainerComponent {
   }
 
   deleteTask(idx: number) {
+    this.selectedTaskToEdit.set(-1);
     if(idx === this.selectedTask()?.id) this.selectedTask.set(null);
     this.tasks.update(prev => {
       const result = prev.map(t => t.id != idx ? t : null).filter(t => !!t)
