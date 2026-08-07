@@ -1,7 +1,7 @@
 import { Component, effect, signal, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideCheck, lucidePlus } from '@ng-icons/lucide';
+import { lucideArrowRightFromLine, lucideBadgeQuestionMark, lucideCheck, lucideEdit, lucidePlus, lucideTrash } from '@ng-icons/lucide';
 import { Task } from '../../../core/models/Tasks.model';
 
 @Component({
@@ -10,9 +10,17 @@ import { Task } from '../../../core/models/Tasks.model';
   templateUrl: './tasks-container.component.html',
   styleUrl: './tasks-container.component.css',
   standalone: true,
-  viewProviders: [provideIcons({lucidePlus, lucideCheck})]
+  viewProviders: [provideIcons({
+    lucidePlus,
+    lucideCheck,
+    lucideTrash,
+    lucideEdit,
+    lucideArrowRightFromLine,
+    lucideBadgeQuestionMark
+  })]
 })
 export class TasksContainerComponent {
+
 
   loadTasksFromStorage() {
     const saved = localStorage.getItem('my_tasks');
@@ -23,6 +31,9 @@ export class TasksContainerComponent {
   protected tasks: WritableSignal<Task[]> = signal(this.loadTasksFromStorage());
   protected _taskToAdd: WritableSignal<string> = signal("");
   protected selectedTask: WritableSignal<Task | null> = signal(null);
+  protected selectedTaskToEdit: WritableSignal<number> = signal(-1);
+  protected newEditedName: string = "";
+  protected showLegend: WritableSignal<boolean> = signal(false);
 
   constructor() {
     effect(() => {
@@ -51,16 +62,33 @@ export class TasksContainerComponent {
   }
 
   selectTask(task: Task) {
+    if(task.status == 'done') return;
     this.selectedTask.set(task);
   }
 
   selectedTaskInset(task: Task) {
     const { id, status } = task;
     if(status == 'done') return;
-    return this.selectedTask()?.id == id ? 'inset-shadow-sm inset-shadow-gray-400' : 'shadow-md shadow-gray-400';
+    return this.selectedTask()?.id == id ? 'inset-shadow-sm inset-shadow-red-400' : 'shadow-md shadow-gray-400';
   }
 
   markAsCompleted(taskId: number) {
-    this.tasks.update(prev => prev.map(t => (t.id == taskId ? {...t, status: t.status == 'done' ? 'todo' : 'done'} : t)))
+    this.tasks.update(prev => prev.map(t => (t.id == taskId ? {...t, status: t.status == 'done' ? 'todo' : 'done'} : t)));
+  }
+
+  confirmEdit(idx: number) {
+    this.tasks.update(prev => prev.map(t => t.id != idx ? t : {...t, name: this.newEditedName}))
+    if(this.selectedTask()?.id == idx) this.selectedTask.set(this.tasks().find(t => t.id == idx) ?? null);
+    this.newEditedName = "";
+    this.selectedTaskToEdit.set(-1);
+  }
+
+  deleteTask(idx: number) {
+    if(idx === this.selectedTask()?.id) this.selectedTask.set(null);
+    this.tasks.update(prev => {
+      const result = prev.map(t => t.id != idx ? t : null).filter(t => !!t)
+      result.forEach((el, idx) => el.id = idx);
+      return result;
+    });
   }
 }

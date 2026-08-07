@@ -5,7 +5,7 @@ import TimerModel from '../models/Timer.model';
 export class CounterService {
   public timerValues: TimerModel[] = [
     {
-      label: "Pommidoro",
+      label: "Work",
       value: 25
     },
     {

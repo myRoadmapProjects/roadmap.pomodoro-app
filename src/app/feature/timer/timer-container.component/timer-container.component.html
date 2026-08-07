@@ -5,7 +5,7 @@
         type="button"
         [class]="'col-span-1 rounded-xl p-2 bg-red-400 cursor-pointer active:inset-shadow-red-900 active:inset-shadow-sm' +  this.selectedTimerInset(selectOption.value)"
         (click)="handleChangeSelectedTimer(index)">
-        {{selectOption.label}}
+        {{selectOption.label.toUpperCase()}}
       </button>
     }
     <!-- </div> -->
